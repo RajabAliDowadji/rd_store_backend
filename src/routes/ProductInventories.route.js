@@ -5,6 +5,7 @@ const {
   addUpdateProductInventory,
   getProductInventories,
   deleteProductInventory,
+  getProductInventoryById,
 } = require("../controllers/ProductInventories.controller");
 
 const {
@@ -30,8 +31,15 @@ router.get(
   getProductInventories
 );
 
+router.get(
+  "/inventory/:id",
+  tokenValidation,
+  adminTokenValidation,
+  getProductInventoryById
+);
+
 router.post(
-  "/inventory",
+  "/inventory/create",
   tokenValidation,
   adminTokenValidation,
   [

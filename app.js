@@ -44,8 +44,8 @@ app.use(ROUTES.SUPER_ADMIN_PRODUCT, ProductBrandRoutes);
 // RD ADMIN Routes End
 
 // RD ADMIN AND SHOP ADMIN START
-app.use(ROUTES.ADMIN_PRODUCT, ProductRoutes);
 app.use(ROUTES.ADMIN_PRODUCT, ProductInventoriesRoutes);
+app.use(ROUTES.ADMIN_PRODUCT, ProductRoutes);
 // RD ADMIN AND SHOP ADMIN END
 
 // ALL ACCESS ROUTES START

@@ -69,7 +69,6 @@ module.exports.fileUpload = multer({
 // upload a file into bucket end
 
 // delete a file in bucket start
-
 module.exports.fileDelete = (filename) => {
   const deleteParams = {
     Bucket: bucketname,
@@ -77,15 +76,5 @@ module.exports.fileDelete = (filename) => {
   };
 
   return s3.send(new DeleteObjectCommand(deleteParams));
-};
-
-module.exports.multipleFileDelete = (files) => {
-  const deleteParams = {
-    Bucket: bucketname,
-    Delete: {
-      Objects: files,
-    },
-  };
-  return s3.send(new DeleteObjectsCommand(deleteParams));
 };
 // delete a file in bucket end

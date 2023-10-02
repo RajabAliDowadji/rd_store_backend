@@ -6,17 +6,45 @@ const { apiResponse } = require("../helpers/apiResponse");
 const { errorResponse } = require("../helpers/errorResponse");
 
 module.exports.getProducts = async (req, resp, next) => {
-  const products = await ProductModal.find()
+  const brand_name = req.query.brand_name;
+  const sub_category_name = req.query.sub_category_name;
+  let queryData = {};
+  if (brand_name || sub_category_name) {
+    queryData = {
+      $or: [
+        { product_sub_category: sub_category_name },
+        { product_brand: brand_name },
+      ],
+    };
+  }
+  const products = await ProductModal.find(queryData)
     .populate("product_sub_category")
-    .populate("product_brand")
-    .populate("rating")
-    .populate("inventory")
-    .populate("commission");
+    .populate("product_brand");
   if (products) {
     return resp
       .status(STATUS.SUCCESS)
       .send(
         apiResponse(STATUS.SUCCESS, PROD_API.PROD_SUCCESS.message, products)
+      );
+  } else {
+    return resp
+      .status(STATUS.INTERNAL_SERVER)
+      .send(errorResponse(STATUS.INTERNAL_SERVER, COMMON.SERVER_ERROR.message));
+  }
+};
+
+module.exports.getProductById = async (req, resp, next) => {
+  const productId = req.params.id;
+  const product = await ProductModal.findOne({ _id: productId })
+    .populate("product_sub_category")
+    .populate("product_brand")
+    .populate("product_images");
+
+  if (product) {
+    return resp
+      .status(STATUS.SUCCESS)
+      .send(
+        apiResponse(STATUS.SUCCESS, PROD_API.PROD_SUCCESS.message, product)
       );
   } else {
     return resp
@@ -35,7 +63,7 @@ module.exports.addProduct = async (req, resp, next) => {
   if (!product) {
     const productmodal = new ProductModal({
       ...req.body,
-      is_published: req.user_type === ACCOUNTTYPE.SUPER_ADMIN,
+      is_published: false,
     });
 
     await productmodal.save();
@@ -84,7 +112,7 @@ module.exports.updateProduct = async (req, resp, next) => {
     product.product_brand = product_brand;
     product.product_size = product_size;
     product.commission = commission;
-    product.is_published = req.user_type === ACCOUNTTYPE.SUPER_ADMIN;
+    product.is_published = false;
     await product.save();
 
     return resp

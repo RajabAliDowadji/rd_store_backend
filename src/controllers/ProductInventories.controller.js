@@ -34,6 +34,41 @@ module.exports.getProductInventories = async (req, resp, next) => {
   }
 };
 
+module.exports.getProductInventoryById = async (req, resp, next) => {
+  const productIneventoryId = req.params.id;
+  const ProductInventory = await ProductInventoriesModal.findOne({
+    _id: productIneventoryId,
+  }).populate({
+    path: "product",
+    populate: [
+      {
+        path: "product_brand",
+      },
+      {
+        path: "product_sub_category",
+      },
+      {
+        path: "product_images",
+      },
+    ],
+  });
+  if (ProductInventory) {
+    return resp
+      .status(STATUS.SUCCESS)
+      .send(
+        apiResponse(
+          STATUS.SUCCESS,
+          PROD_QTY_API.PROD_QTY_SUCCESS.message,
+          ProductInventory
+        )
+      );
+  } else {
+    return resp
+      .status(STATUS.INTERNAL_SERVER)
+      .send(errorResponse(STATUS.INTERNAL_SERVER, COMMON.SERVER_ERROR.message));
+  }
+};
+
 module.exports.addUpdateProductInventory = async (req, resp, next) => {
   const productId = req.body.product;
   const quantity = req.body.quantity;

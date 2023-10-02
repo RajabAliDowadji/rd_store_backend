@@ -1,6 +1,6 @@
 const S3BucketModal = require("../models/S3Bucket.modal");
 const { BUCKET_API, COMMON } = require("../constants/S3Bucket.message");
-const { fileDelete } = require("../middlewares/fileUpload");
+const { fileDelete, multipleFileDelete } = require("../middlewares/fileUpload");
 const { STATUS } = require("../constants/Constants");
 const { apiResponse } = require("../helpers/apiResponse");
 const { errorResponse } = require("../helpers/errorResponse");
@@ -21,6 +21,28 @@ module.exports.addBucketImage = async (req, resp, next) => {
         STATUS.CREATED,
         BUCKET_API.BUCKET_CREATE.message,
         s3bucketmodal
+      )
+    );
+};
+
+module.exports.uploadMultipleImages = async (req, resp, next) => {
+  let files = [];
+  req.files.map((file) => {
+    files.push({
+      file_name: file.key,
+      file_size: file.size,
+      file_key: file.key,
+      file_url: file.location,
+    });
+  });
+  const S3BucketResponse = await S3BucketModal.insertMany(files);
+  return resp
+    .status(STATUS.CREATED)
+    .send(
+      apiResponse(
+        STATUS.CREATED,
+        BUCKET_API.BUCKET_CREATE.message,
+        S3BucketResponse
       )
     );
 };
