@@ -6,6 +6,7 @@ const {
   addCommission,
   updateCommission,
   deleteCommission,
+  getCommissionById,
 } = require("../controllers/Commission.controller");
 
 const {
@@ -27,6 +28,13 @@ router.get(
   tokenValidation,
   rdAdminTokenValidation,
   getCommissions
+);
+
+router.get(
+  "/commission/:id",
+  tokenValidation,
+  rdAdminTokenValidation,
+  getCommissionById
 );
 
 router.post(

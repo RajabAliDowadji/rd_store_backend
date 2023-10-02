@@ -22,6 +22,23 @@ module.exports.getCommissions = async (req, resp, next) => {
   }
 };
 
+module.exports.getCommissionById = async (req, resp, next) => {
+  const commissionId = req.params.id;
+  const commission = await CommissionModal.findOne({ _id: commissionId })
+    .populate("commission_type")
+    .populate("product");
+  if (commission) {
+    return resp
+      .status(STATUS.SUCCESS)
+      .send(
+        apiResponse(STATUS.SUCCESS, COM_API.COM_SUCCESS.message, commission)
+      );
+  } else {
+    return resp
+      .status(STATUS.INTERNAL_SERVER)
+      .send(errorResponse(STATUS.INTERNAL_SERVER, COMMON.SERVER_ERROR.message));
+  }
+};
 module.exports.addCommission = async (req, resp, next) => {
   const productId = req.body.product;
   const commission_typeId = req.body.commission_type;
