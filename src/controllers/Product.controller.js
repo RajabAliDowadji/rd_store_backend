@@ -1,4 +1,6 @@
 const ProductModal = require("../models/Product.modal");
+const CommissionModal = require("../models/Commission.modal");
+const ProductRatingModal = require("../models/ProductRating.modal");
 const ProductInventoriesModal = require("../models/ProductInventories.modal");
 const { PROD_API, COMMON } = require("../constants/Product.messages");
 const { STATUS, ACCOUNTTYPE } = require("../constants/Constants");
@@ -18,6 +20,9 @@ module.exports.getProducts = async (req, resp, next) => {
     };
   }
   const products = await ProductModal.find(queryData)
+    .populate("commission")
+    .populate("rating")
+    .populate("inventory")
     .populate("product_sub_category")
     .populate("product_brand");
   if (products) {
@@ -38,7 +43,10 @@ module.exports.getProductById = async (req, resp, next) => {
   const product = await ProductModal.findOne({ _id: productId })
     .populate("product_sub_category")
     .populate("product_brand")
-    .populate("product_images");
+    .populate("product_images")
+    .populate("commission")
+    .populate("rating")
+    .populate("inventory");
 
   if (product) {
     return resp
@@ -129,14 +137,15 @@ module.exports.deleteProduct = async (req, resp, next) => {
   const productId = req.params.id;
   const product = await ProductModal.findOne({ _id: productId });
   if (product) {
-    const productinventory = await ProductInventoriesModal.findOne({
+    await ProductInventoriesModal.findOneAndDelete({
       product: productId,
     });
-    if (productinventory) {
-      await ProductInventoriesModal.findByIdAndRemove({
-        _id: productinventory._id,
-      });
-    }
+    await CommissionModal.findByIdAndRemove({
+      product: productId,
+    });
+    await ProductRatingModal.findByIdAndRemove({
+      product: productId,
+    });
 
     await ProductModal.findByIdAndRemove({ _id: productId });
 

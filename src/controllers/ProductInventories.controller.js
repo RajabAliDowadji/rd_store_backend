@@ -83,9 +83,15 @@ module.exports.addUpdateProductInventory = async (req, resp, next) => {
     });
     await productinventory.save();
 
-    product.inventory = productinventory._id;
+    await ProductModal.findOneAndUpdate(
+      { _id: productId },
+      {
+        inventory: productinventory._id,
+        is_published:
+          product.rating != null && product.commission != null ? true : false,
+      }
+    );
 
-    await product.save();
     return resp
       .status(STATUS.CREATED)
       .send(
@@ -122,15 +128,11 @@ module.exports.deleteProductInventory = async (req, resp, next) => {
   const productIneventory = await ProductInventoriesModal.findOne({
     _id: productIneventoryId,
   });
-  const product = await ProductModal.findOne({
-    inventory: productIneventoryId,
-  });
-
   if (productIneventory) {
-    product.inventory = null;
-
-    await product.save();
-
+    await ProductModal.findOneAndUpdate(
+      { inventory: productIneventoryId },
+      { is_published: false, inventory: null }
+    );
     await ProductInventoriesModal.findByIdAndRemove({
       _id: productIneventoryId,
     });

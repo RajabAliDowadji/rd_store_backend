@@ -16,6 +16,7 @@ const ProductInventoriesRoutes = require("./src/routes/ProductInventories.route"
 const ProductRatingRoutes = require("./src/routes/ProductRating.route");
 const CommissionTypeRoutes = require("./src/routes/CommissionType.route");
 const CommissionRoutes = require("./src/routes/Commission.route");
+const AdminCommissionRoutes = require("./src/routes/AdminCommission.route");
 const ImageUploadRoutes = require("./src/routes/S3Bucket.route");
 const UserRoutes = require("./src/routes/User.route");
 const CartRoutes = require("./src/routes/Cart.route");
@@ -38,6 +39,7 @@ app.use(ROUTES.SUPER_ADMIN, ShopCategoriesRoutes);
 app.use(ROUTES.SUPER_ADMIN, ShopRoutes);
 app.use(ROUTES.SUPER_ADMIN, CommissionRoutes);
 app.use(ROUTES.SUPER_ADMIN_PRODUCT, ProductTypeRoutes);
+app.use(ROUTES.SUPER_ADMIN, AdminCommissionRoutes);
 app.use(ROUTES.SUPER_ADMIN_PRODUCT, ProductCategoriesRoutes);
 app.use(ROUTES.SUPER_ADMIN_PRODUCT, ProductSubCategoriesRoutes);
 app.use(ROUTES.SUPER_ADMIN_PRODUCT, ProductBrandRoutes);

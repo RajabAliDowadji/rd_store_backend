@@ -69,4 +69,30 @@ module.exports = {
       status: 400,
     },
   },
+  ADM_COM_API: {
+    ADM_COM_SUCCESS: {
+      message: "Ok",
+      status: 200,
+    },
+    ADM_COM_CREATE: {
+      message: "Admin Commission added successfully.",
+      status: 201,
+    },
+    ADM_COM_UPDATE: {
+      message: "Admin Commission updated successfully.",
+      status: 200,
+    },
+    ADM_COM_DELETE: {
+      message: "Admin Commission deleted successfully.",
+      status: 200,
+    },
+    ADM_COM_NOT_FOUND: {
+      message: "Commission not found.",
+      status: 400,
+    },
+    ADM_COM_INVALID_ID: {
+      message: "Please provide valid Admin Commission id.",
+      status: 400,
+    },
+  },
 };

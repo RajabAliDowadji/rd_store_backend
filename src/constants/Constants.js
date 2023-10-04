@@ -7,11 +7,11 @@ module.exports = {
     INTERNAL_SERVER: 500,
   },
   ROUTES: {
+    ROOT: "/",
     SUPER_ADMIN: "/rd_admin",
     SUPER_ADMIN_PRODUCT: "/rd_admin/product",
     PRODUCT: "/product",
     //TODO
-    ROOT: "/",
     SHOP_ADMIN: "/shop_admin",
     ADMIN: "/admin",
     ADMIN_PRODUCT: "/admin/product",

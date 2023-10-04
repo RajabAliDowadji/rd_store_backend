@@ -39,11 +39,13 @@ const ProductSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "product_rating",
       required: false,
+      default: null,
     },
     inventory: {
       type: Schema.Types.ObjectId,
       ref: "product_inverntories",
       required: false,
+      default: null,
     },
     product_sub_category: {
       type: Schema.Types.ObjectId,
@@ -63,6 +65,7 @@ const ProductSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "product_rating",
       required: false,
+      default: null,
     },
     is_published: {
       type: Boolean,

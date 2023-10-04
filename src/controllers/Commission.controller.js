@@ -1,4 +1,5 @@
 const CommissionModal = require("../models/Commission.modal");
+const ProductRatingModal = require("../models/ProductRating.modal");
 const { COM_API, COMMON } = require("../constants/Commission.message");
 const { STATUS } = require("../constants/Constants");
 const { apiResponse } = require("../helpers/apiResponse");
@@ -51,9 +52,20 @@ module.exports.addCommission = async (req, resp, next) => {
       commission_type: commission_typeId,
       product: productId,
     });
+    const productRatingmodal = new ProductRatingModal({
+      product: productId,
+    });
+
+    const productRating = await productRatingmodal.save();
     await commissionmodal.save();
-    product.commission = commissionmodal._id;
-    product.save();
+    await ProductModal.findOneAndUpdate(
+      { _id: productId },
+      {
+        commission: commissionmodal._id,
+        rating: productRating._id,
+        is_published: product.inventory != null ? true : false,
+      }
+    );
     return resp
       .status(STATUS.CREATED)
       .send(
@@ -97,11 +109,11 @@ module.exports.updateCommission = async (req, resp, next) => {
 module.exports.deleteCommission = async (req, resp, next) => {
   const commissionId = req.params.id;
   const response = await CommissionModal.findOne({ _id: commissionId });
-  const product = await ProductModal.findOne({ commission: commissionId });
   if (response) {
-    product.commission = null;
-    await product.save();
-
+    await ProductModal.findOneAndUpdate(
+      { commission: commissionId },
+      { is_published: false, commission: null }
+    );
     await CommissionModal.findByIdAndRemove({ _id: commissionId });
 
     return resp

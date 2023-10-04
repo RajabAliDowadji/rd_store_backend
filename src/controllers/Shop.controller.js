@@ -1,4 +1,5 @@
 const ShopModal = require("../models/Shop.modal");
+const AdminCommissionModal = require("../models/AdminCommission.modal");
 const { SHOP_API, COMMON } = require("../constants/Shop.messages");
 const { STATUS } = require("../constants/Constants");
 const { multipleDeleteFile } = require("../helpers/multipleDeleteFile");
@@ -81,6 +82,10 @@ module.exports.addShop = async (req, resp, next) => {
       shop_category: shop_category,
     });
     await shopmodal.save();
+    const adminCommission = new AdminCommissionModal({
+      shop_id: shopmodal._id,
+    });
+    await adminCommission.save();
     return resp
       .status(STATUS.CREATED)
       .send(
