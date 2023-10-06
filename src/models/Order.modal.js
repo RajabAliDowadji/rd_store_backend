@@ -11,6 +11,10 @@ const OrderSchema = Schema(
       type: Number,
       required: true,
     },
+    commission_price: {
+      type: Number,
+      required: true,
+    },
     user_id: {
       type: Schema.Types.ObjectId,
       ref: "user",

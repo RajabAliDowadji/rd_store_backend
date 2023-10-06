@@ -25,6 +25,7 @@ module.exports.getCartItems = async (req, resp, next) => {
 module.exports.addUpdateCartItems = async (req, resp, next) => {
   const { user_id } = req;
   const { cart_items } = req.body;
+  let cart = [];
   const cartItem = await CartModal.findOne({ user: user_id });
   if (!cartItem) {
     const cart = new CartModal({
@@ -38,6 +39,15 @@ module.exports.addUpdateCartItems = async (req, resp, next) => {
       .status(STATUS.CREATED)
       .send(apiResponse(STATUS.CREATED, CART_API.CART_CREATE.message, cart));
   } else {
+    cartItem.cart_items.map((item) => {
+      cart_items.find((cart_product, index) => {
+        if (cart_product.product.toString() === item.product.toString()) {
+          cart_items[index].product_qty =
+            cart_items[index].product_qty + item.product_qty;
+        }
+      });
+    });
+
     cartItem.user = user_id;
     cartItem.cart_items = cart_items;
 

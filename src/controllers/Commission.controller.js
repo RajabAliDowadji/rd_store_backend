@@ -1,9 +1,11 @@
 const CommissionModal = require("../models/Commission.modal");
 const ProductRatingModal = require("../models/ProductRating.modal");
+const CommissionTypeModal = require("../models/CommissionType.modal");
 const { COM_API, COMMON } = require("../constants/Commission.message");
 const { STATUS } = require("../constants/Constants");
 const { apiResponse } = require("../helpers/apiResponse");
 const { errorResponse } = require("../helpers/errorResponse");
+const { commissionCount } = require("../middlewares/commissionCount");
 const ProductModal = require("../models/Product.modal");
 
 module.exports.getCommissions = async (req, resp, next) => {
@@ -45,11 +47,20 @@ module.exports.addCommission = async (req, resp, next) => {
   const commission_typeId = req.body.commission_type;
   const commission = req.body.commission;
   const isExist = await CommissionModal.findOne({ product: productId });
+  const commission_type = await CommissionTypeModal.findOne({
+    _id: commission_typeId,
+  });
   const product = await ProductModal.findOne({ _id: productId });
   if (!isExist) {
+    const commission_price = await commissionCount(
+      product,
+      commission_type,
+      commission
+    );
     const commissionmodal = new CommissionModal({
       commission: commission,
       commission_type: commission_typeId,
+      commission_price: commission_price,
       product: productId,
     });
     const productRatingmodal = new ProductRatingModal({
@@ -85,8 +96,18 @@ module.exports.updateCommission = async (req, resp, next) => {
   const findCommissionProduct = await CommissionModal.findOne({
     product: productId,
   });
+  const commission_type = await CommissionTypeModal.findOne({
+    _id: commission_typeId,
+  });
+  const product = await ProductModal.findOne({ _id: productId });
   if (findCommissionProduct) {
+    const commission_price = await commissionCount(
+      product,
+      commission_type,
+      commission
+    );
     findCommissionProduct.commission = commission;
+    findCommissionProduct.commission_price = commission_price;
     findCommissionProduct.productId = productId;
     findCommissionProduct.commission_type = commission_typeId;
     await findCommissionProduct.save();

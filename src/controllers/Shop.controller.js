@@ -82,6 +82,7 @@ module.exports.addShop = async (req, resp, next) => {
       shop_category: shop_category,
     });
     await shopmodal.save();
+
     const adminCommission = new AdminCommissionModal({
       shop_id: shopmodal._id,
     });
@@ -159,6 +160,7 @@ module.exports.deleteShop = async (req, resp, next) => {
     ];
     await multipleDeleteFile(deleteFile);
     await ShopModal.findByIdAndRemove({ _id: shopId });
+    await AdminCommissionModal.findOneAndDelete({ shop_id: shopId });
     return resp
       .status(STATUS.SUCCESS)
       .send(apiResponse(STATUS.SUCCESS, SHOP_API.SHOP_DELETE.message));

@@ -12,6 +12,10 @@ const CommissionSchema = Schema(
       ref: "commission_type",
       required: true,
     },
+    commission_price: {
+      type: Number,
+      default: 0,
+    },
     product: {
       type: Schema.Types.ObjectId,
       ref: "product",

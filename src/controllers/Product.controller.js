@@ -140,10 +140,10 @@ module.exports.deleteProduct = async (req, resp, next) => {
     await ProductInventoriesModal.findOneAndDelete({
       product: productId,
     });
-    await CommissionModal.findByIdAndRemove({
+    await CommissionModal.findOneAndDelete({
       product: productId,
     });
-    await ProductRatingModal.findByIdAndRemove({
+    await ProductRatingModal.findOneAndDelete({
       product: productId,
     });
 

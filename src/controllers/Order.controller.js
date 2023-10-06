@@ -2,6 +2,7 @@ const OrderModal = require("../models/Order.modal");
 const CartModal = require("../models/Cart.modal");
 const UserModal = require("../models/User.modal");
 const ProductModal = require("../models/Product.modal");
+const AdminCommissionModal = require("../models/AdminCommission.modal");
 const { ORDER_API, COMMON } = require("../constants/Order.message");
 const { STATUS } = require("../constants/Constants");
 const { apiResponse } = require("../helpers/apiResponse");
@@ -30,12 +31,15 @@ module.exports.placeOrder = async (req, resp, next) => {
   const { user_id } = req;
   let total_qty = 0;
   let total_price = 0;
+  let commission_price = 0;
   let orderItem = [];
   const cartItem = await CartModal.findOne({ user: user_id });
   const user = await UserModal.findOne({ _id: user_id });
   const product_items = await ProductModal.find({
     _id: { $in: cartItem.cart_items.map((item) => item.product) },
-  }).populate("product_brand");
+  })
+    .populate("product_brand")
+    .populate("commission");
   if (cartItem) {
     cartItem.cart_items.map((item) => {
       return (total_qty = item.product_qty + total_qty);
@@ -64,10 +68,13 @@ module.exports.placeOrder = async (req, resp, next) => {
           product_description: product.product_description,
         },
       });
+      commission_price +=
+        item.product_qty * product.commission.commission_price;
     });
     const orderBody = {
       total_qty: total_qty,
       total_price: total_price,
+      commission_price: commission_price,
       user_id: user_id,
       user: {
         name: user.user_name,
@@ -176,6 +183,17 @@ module.exports.deliveredOrder = async (req, resp, next) => {
 
   if (order) {
     if (order.shop_accepted && order.shipper_accepted) {
+      const adminCommission = await AdminCommissionModal.findOne({
+        shop_id: order.shop_id,
+      });
+      adminCommission.orders_count += adminCommission.orders_count + 1;
+      adminCommission.total_payments +=
+        adminCommission.total_payments + order.total_price;
+      adminCommission.total_commissions +=
+        adminCommission.total_commissions + order.commission_price;
+
+      await adminCommission.save();
+
       order.deliverd = true;
 
       await order.save();
