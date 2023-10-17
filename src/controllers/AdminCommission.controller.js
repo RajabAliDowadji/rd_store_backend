@@ -5,7 +5,9 @@ const { apiResponse } = require("../helpers/apiResponse");
 const { errorResponse } = require("../helpers/errorResponse");
 
 module.exports.getAdminCommissions = async (req, resp, next) => {
-  const adminCommissions = await AdminCommissionModal.find();
+  const adminCommissions = await AdminCommissionModal.find().populate(
+    "shop_id"
+  );
   if (adminCommissions) {
     return resp
       .status(STATUS.SUCCESS)
