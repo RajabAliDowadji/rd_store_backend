@@ -19,15 +19,9 @@ const { validation } = require("../validators/Validators");
 
 const router = express.Router();
 
-router.get("/types", tokenValidation, rdAdminTokenValidation, getProdTypes);
+router.get("/types", tokenValidation, getProdTypes);
 
-router.get(
-  "/type/:id",
-  idValidation,
-  tokenValidation,
-  rdAdminTokenValidation,
-  getProdTypeById
-);
+router.get("/type/:id", idValidation, tokenValidation, getProdTypeById);
 
 router.post(
   "/type/create",
