@@ -47,6 +47,11 @@ const ProductSchema = Schema(
       required: false,
       default: null,
     },
+    product_category: {
+      type: Schema.Types.ObjectId,
+      ref: "product_categories",
+      required: true,
+    },
     product_sub_category: {
       type: Schema.Types.ObjectId,
       ref: "product_sub_categories",
@@ -56,10 +61,6 @@ const ProductSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "product_brand",
       required: true,
-    },
-    search_name: {
-      type: String,
-      required: false,
     },
     product_rating: {
       type: Schema.Types.ObjectId,

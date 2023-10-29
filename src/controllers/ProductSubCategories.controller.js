@@ -5,14 +5,16 @@ const { apiResponse } = require("../helpers/apiResponse");
 const { errorResponse } = require("../helpers/errorResponse");
 
 module.exports.getProductSubCategories = async (req, resp, next) => {
-  const productSubCategories = await ProductSubCategoriesModal.find().populate({
-    path: "product_category",
-    populate: [
-      {
-        path: "product_type",
-      },
-    ],
-  });
+  const product_category = req.query.product_category;
+  let queryData = {};
+  if (product_category) {
+    queryData = {
+      $or: [{ product_category: product_category }],
+    };
+  }
+  const productSubCategories = await ProductSubCategoriesModal.find(queryData)
+    .populate("product_category")
+    .populate("sub_category_image");
   if (productSubCategories) {
     return resp
       .status(STATUS.SUCCESS)
@@ -34,14 +36,10 @@ module.exports.getProductSubCategoryById = async (req, resp, next) => {
   const subCategoryId = req.params.id;
   const prodSubCategory = await ProductSubCategoriesModal.findOne({
     _id: subCategoryId,
-  }).populate({
-    path: "product_category",
-    populate: [
-      {
-        path: "product_type",
-      },
-    ],
-  });
+  })
+    .populate("product_category")
+    .populate("sub_category_image");
+
   if (prodSubCategory) {
     return resp
       .status(STATUS.SUCCESS)
@@ -61,7 +59,7 @@ module.exports.getProductSubCategoryById = async (req, resp, next) => {
 
 module.exports.addProductSubCategory = async (req, resp, next) => {
   const sub_category_name = req.body.sub_category_name;
-  const search_name = req.body.search_name;
+  const sub_category_image = req.body.sub_category_image;
   const product_category = req.body.product_category;
 
   const prodSubCategory = await ProductSubCategoriesModal.findOne({
@@ -71,7 +69,7 @@ module.exports.addProductSubCategory = async (req, resp, next) => {
   if (!prodSubCategory) {
     const prodSubCategory = new ProductSubCategoriesModal({
       sub_category_name: sub_category_name,
-      search_name: search_name,
+      sub_category_image: sub_category_image,
       product_category: product_category,
     });
 
@@ -101,14 +99,14 @@ module.exports.addProductSubCategory = async (req, resp, next) => {
 module.exports.updateProductSubCategory = async (req, resp, next) => {
   const subCategoryId = req.params.id;
   const sub_category_name = req.body.sub_category_name;
-  const search_name = req.body.search_name;
+  const sub_category_image = req.body.sub_category_image;
   const product_category = req.body.product_category;
   const prodSubCategory = await ProductSubCategoriesModal.findOne({
     _id: subCategoryId,
   });
   if (prodSubCategory) {
     prodSubCategory.sub_category_name = sub_category_name;
-    prodSubCategory.search_name = search_name;
+    prodSubCategory.sub_category_image = sub_category_image;
     prodSubCategory.product_category = product_category;
 
     await prodSubCategory.save();

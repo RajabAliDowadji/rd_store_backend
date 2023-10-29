@@ -28,7 +28,7 @@ const {
 const router = express.Router();
 
 router.get("/", getProducts);
-router.get("/:id", idValidation, tokenValidation, getProductById);
+router.get("/:id", getProductById);
 
 router.post(
   "/create",

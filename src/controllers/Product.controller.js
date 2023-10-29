@@ -8,23 +8,27 @@ const { apiResponse } = require("../helpers/apiResponse");
 const { errorResponse } = require("../helpers/errorResponse");
 
 module.exports.getProducts = async (req, resp, next) => {
-  const brand_name = req.query.brand_name;
-  const sub_category_name = req.query.sub_category_name;
+  const product_category = req.query.product_category;
+  const product_sub_category = req.query.product_sub_category;
   let queryData = {};
-  if (brand_name || sub_category_name) {
+  if (product_category && product_sub_category) {
     queryData = {
-      $or: [
-        { product_sub_category: sub_category_name },
-        { product_brand: brand_name },
+      $and: [
+        { product_sub_category: product_sub_category },
+        { product_category: product_category },
       ],
+    };
+  } else if (product_category) {
+    queryData = {
+      $or: [{ product_category: product_category }],
     };
   }
   const products = await ProductModal.find(queryData)
-    .populate("commission")
     .populate("rating")
-    .populate("inventory")
     .populate("product_sub_category")
-    .populate("product_brand");
+    .populate("product_brand")
+    .populate("product_category")
+    .populate("product_images");
   if (products) {
     return resp
       .status(STATUS.SUCCESS)
@@ -43,11 +47,9 @@ module.exports.getProductById = async (req, resp, next) => {
   const product = await ProductModal.findOne({ _id: productId })
     .populate("product_sub_category")
     .populate("product_brand")
+    .populate("product_category")
     .populate("product_images")
-    .populate("commission")
-    .populate("rating")
-    .populate("inventory");
-
+    .populate("rating");
   if (product) {
     return resp
       .status(STATUS.SUCCESS)
@@ -92,12 +94,12 @@ module.exports.updateProduct = async (req, resp, next) => {
   const productId = req.params.id;
   const {
     product_title,
-    search_name,
     product_price,
     product_MRP_price,
     product_description,
     product_images,
     isVegetarian,
+    product_category,
     product_sub_category,
     product_brand,
     product_size,
@@ -108,7 +110,6 @@ module.exports.updateProduct = async (req, resp, next) => {
   const product = await ProductModal.findOne({ _id: productId });
   if (product) {
     product.product_title = product_title;
-    product.search_name = search_name;
     product.product_price = product_price;
     product.product_MRP_price = product_MRP_price;
     product.product_description = product_description;
@@ -116,6 +117,7 @@ module.exports.updateProduct = async (req, resp, next) => {
     product.isVegetarian = isVegetarian;
     product.rating = rating;
     product.inventory = inventory;
+    product.product_category = product_category;
     product.product_sub_category = product_sub_category;
     product.product_brand = product_brand;
     product.product_size = product_size;

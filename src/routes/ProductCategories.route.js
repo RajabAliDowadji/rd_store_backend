@@ -22,18 +22,12 @@ const { validation } = require("../validators/Validators");
 
 const router = express.Router();
 
-router.get(
-  "/categories",
-  tokenValidation,
-  rdAdminTokenValidation,
-  getProductCategories
-);
+router.get("/categories", getProductCategories);
 
 router.get(
   "/category/:id",
   idValidation,
   tokenValidation,
-  rdAdminTokenValidation,
   getProductCategoryById
 );
 
@@ -43,10 +37,9 @@ router.post(
   rdAdminTokenValidation,
   [
     body("category_name").isString().trim().notEmpty(),
-    body("product_type").isString().trim().notEmpty(),
+    body("category_image").isString().trim().notEmpty(),
   ],
   validation,
-  productTypeValidation,
   addProductCategory
 );
 
@@ -57,10 +50,9 @@ router.put(
   rdAdminTokenValidation,
   [
     body("category_name").isString().trim().notEmpty(),
-    body("product_type").isString().trim().notEmpty(),
+    body("category_image").isString().trim().notEmpty(),
   ],
   validation,
-  productTypeValidation,
   updateProductCategory
 );
 

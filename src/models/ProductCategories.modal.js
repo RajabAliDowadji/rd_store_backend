@@ -8,13 +8,9 @@ const ProductCategoriesSchema = Schema(
       type: String,
       required: true,
     },
-    search_name: {
-      type: String,
-      required: false,
-    },
-    product_type: {
+    category_image: {
       type: Schema.Types.ObjectId,
-      ref: "product_type",
+      ref: "file",
       required: true,
     },
   },

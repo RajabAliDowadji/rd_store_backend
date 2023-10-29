@@ -26,7 +26,6 @@ router.post(
   "/cart/item",
   tokenValidation,
   userTokenValidation,
-  [body("cart_items").isArray().notEmpty()],
   validation,
   addUpdateCartItems
 );
@@ -36,7 +35,6 @@ router.put(
   idValidation,
   tokenValidation,
   userTokenValidation,
-  [body("cart_items").isArray().notEmpty()],
   validation,
   addUpdateCartItems
 );

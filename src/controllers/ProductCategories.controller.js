@@ -6,7 +6,7 @@ const { errorResponse } = require("../helpers/errorResponse");
 
 module.exports.getProductCategories = async (req, resp, next) => {
   const productCategories = await ProductCategoriesModal.find().populate(
-    "product_type"
+    "category_image"
   );
   if (productCategories) {
     return resp
@@ -28,7 +28,7 @@ module.exports.getProductCategoryById = async (req, resp, next) => {
   const productCategoryId = req.params.id;
   const productCategory = await ProductCategoriesModal.findOne({
     _id: productCategoryId,
-  }).populate("product_type");
+  }).populate("category_image");
   if (productCategory) {
     return resp
       .status(STATUS.SUCCESS)
@@ -47,16 +47,14 @@ module.exports.getProductCategoryById = async (req, resp, next) => {
 };
 module.exports.addProductCategory = async (req, resp, next) => {
   const category_name = req.body.category_name;
-  const search_name = req.body.search_name;
-  const product_type = req.body.product_type;
+  const category_image = req.body.category_image;
   const productCategory = await ProductCategoriesModal.findOne({
     category_name,
   });
   if (!productCategory) {
     const productCategory = new ProductCategoriesModal({
       category_name: category_name,
-      search_name: search_name,
-      product_type: product_type,
+      category_image: category_image,
     });
     await productCategory.save();
     return resp
@@ -83,15 +81,13 @@ module.exports.addProductCategory = async (req, resp, next) => {
 module.exports.updateProductCategory = async (req, resp, next) => {
   const productCategoryId = req.params.id;
   const category_name = req.body.category_name;
-  const search_name = req.body.search_name;
-  const product_type = req.body.product_type;
+  const category_image = req.body.category_image;
   const productCategory = await ProductCategoriesModal.findOne({
     _id: productCategoryId,
   });
   if (productCategory) {
     productCategory.category_name = category_name;
-    productCategory.search_name = search_name;
-    productCategory.product_type = product_type;
+    productCategory.category_image = category_image;
 
     await productCategory.save();
 

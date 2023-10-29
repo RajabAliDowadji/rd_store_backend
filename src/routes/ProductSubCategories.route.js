@@ -22,20 +22,9 @@ const { validation } = require("../validators/Validators");
 
 const router = express.Router();
 
-router.get(
-  "/sub_categories",
-  tokenValidation,
-  rdAdminTokenValidation,
-  getProductSubCategories
-);
+router.get("/sub_categories", getProductSubCategories);
 
-router.get(
-  "/sub_category/:id",
-  idValidation,
-  tokenValidation,
-  rdAdminTokenValidation,
-  getProductSubCategoryById
-);
+router.get("/sub_category/:id", idValidation, getProductSubCategoryById);
 
 router.post(
   "/sub_category/create",
@@ -43,6 +32,7 @@ router.post(
   rdAdminTokenValidation,
   [
     body("sub_category_name").isString().trim().notEmpty(),
+    body("sub_category_image").isString().trim().notEmpty(),
     body("product_category").isString().trim().notEmpty(),
   ],
   validation,
@@ -57,6 +47,7 @@ router.put(
   rdAdminTokenValidation,
   [
     body("sub_category_name").isString().trim().notEmpty(),
+    body("sub_category_image").isString().trim().notEmpty(),
     body("product_category").isString().trim().notEmpty(),
   ],
   validation,

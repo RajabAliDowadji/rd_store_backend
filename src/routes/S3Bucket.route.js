@@ -3,16 +3,11 @@ const {
   addBucketImage,
   uploadMultipleImages,
   deleteBucketImage,
-  multipleDeleteBucketImages,
 } = require("../controllers/S3Bucket.controller");
 
 const { idValidation } = require("../middlewares/IdValidation");
 
 const { fileUpload } = require("../middlewares/fileUpload");
-
-const { rdAdminTokenValidation } = require("../validators/userTypeValidators");
-
-const { tokenValidation } = require("../validators/tokenValidators");
 
 const router = express.Router();
 

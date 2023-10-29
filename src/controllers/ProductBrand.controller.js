@@ -5,14 +5,7 @@ const { apiResponse } = require("../helpers/apiResponse");
 const { errorResponse } = require("../helpers/errorResponse");
 
 module.exports.getProductBrands = async (req, resp, next) => {
-  const productBrands = await ProductBrandModal.find().populate({
-    path: "sub_category_ids.sub_category",
-    populate: [
-      {
-        path: "product_category",
-      },
-    ],
-  });
+  const productBrands = await ProductBrandModal.find();
   if (productBrands) {
     return resp
       .status(STATUS.SUCCESS)
@@ -34,13 +27,6 @@ module.exports.getProductBrandById = async (req, resp, next) => {
   const productBrandId = req.params.id;
   const productBrand = await ProductBrandModal.findOne({
     _id: productBrandId,
-  }).populate({
-    path: "sub_category_ids.sub_category",
-    populate: [
-      {
-        path: "product_category",
-      },
-    ],
   });
   if (productBrand) {
     return resp
@@ -61,7 +47,6 @@ module.exports.getProductBrandById = async (req, resp, next) => {
 
 module.exports.addProductBrand = async (req, resp, next) => {
   const brand_name = req.body.brand_name;
-  const sub_category_ids = req.body.sub_category_ids;
 
   const prodctBrand = await ProductBrandModal.findOne({
     brand_name: brand_name,
@@ -69,7 +54,6 @@ module.exports.addProductBrand = async (req, resp, next) => {
   if (!prodctBrand) {
     const prodctBrand = new ProductBrandModal({
       brand_name: brand_name,
-      sub_category_ids: sub_category_ids,
     });
 
     await prodctBrand.save();
@@ -98,13 +82,11 @@ module.exports.addProductBrand = async (req, resp, next) => {
 module.exports.updateProductBrand = async (req, resp, next) => {
   const productBrandId = req.params.id;
   const brand_name = req.body.brand_name;
-  const sub_category_ids = req.body.sub_category_ids;
   const productBrand = await ProductBrandModal.findOne({
     _id: productBrandId,
   });
   if (productBrand) {
     productBrand.brand_name = brand_name;
-    productBrand.sub_category_ids = sub_category_ids;
 
     await productBrand.save();
 
