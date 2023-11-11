@@ -1,15 +1,7 @@
 const express = require("express");
 const { body } = require("express-validator");
 
-const {
-  getUsers,
-  addUser,
-  updateUser,
-  deleteUser,
-  loginUser,
-  forgotPasswordUser,
-  resetPasswordUser,
-} = require("../controllers/User.controller");
+const { addUser, loginUser } = require("../controllers/User.controller");
 
 const {
   phoneNumberValidation,
@@ -32,131 +24,131 @@ const { tokenValidation } = require("../validators/tokenValidators");
 
 const router = express.Router();
 
-// Get All types of users
-router.get("/users", getUsers);
+// // Get All types of users
+// router.get("/users", getUsers);
 
-// All Super Admin API Start
-router.post(
-  "/rd_admin/create",
-  [
-    body("user_name").isString().trim().notEmpty(),
-    body("email").trim().isEmail().normalizeEmail(),
-    body("phone_number").isString(),
-    body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-    body("user_type").isString().trim().notEmpty(),
-  ],
-  phoneNumberValidation,
-  validation,
-  rdAdminValidation,
-  addUser
-);
+// // All Super Admin API Start
+// router.post(
+//   "/rd_admin/create",
+//   [
+//     body("user_name").isString().trim().notEmpty(),
+//     body("email").trim().isEmail().normalizeEmail(),
+//     body("phone_number").isString(),
+//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
+//     body("user_type").isString().trim().notEmpty(),
+//   ],
+//   phoneNumberValidation,
+//   validation,
+//   rdAdminValidation,
+//   addUser
+// );
 
-router.put(
-  "/rd_admin/:id",
-  idValidation,
-  [
-    body("user_name").isString().trim().notEmpty(),
-    body("email").trim().isEmail().normalizeEmail(),
-    body("phone_number").isString(),
-    body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-    body("user_type").isString().trim().notEmpty(),
-  ],
-  phoneNumberValidation,
-  validation,
-  rdAdminValidation,
-  updateUser
-);
+// router.put(
+//   "/rd_admin/:id",
+//   idValidation,
+//   [
+//     body("user_name").isString().trim().notEmpty(),
+//     body("email").trim().isEmail().normalizeEmail(),
+//     body("phone_number").isString(),
+//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
+//     body("user_type").isString().trim().notEmpty(),
+//   ],
+//   phoneNumberValidation,
+//   validation,
+//   rdAdminValidation,
+//   updateUser
+// );
 
-// All Super Admin API End
+// // All Super Admin API End
 
-// All Shop Admin API Start
-router.post(
-  "/shop_admin/create",
-  [
-    body("user_name").isString().trim().notEmpty(),
-    body("email").trim().isEmail().normalizeEmail(),
-    body("phone_number").isString(),
-    body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-    body("user_type").isString().trim().notEmpty(),
-  ],
-  phoneNumberValidation,
-  validation,
-  tokenValidation,
-  shopAdminUserValidation,
-  addUser
-);
+// // All Shop Admin API Start
+// router.post(
+//   "/shop_admin/create",
+//   [
+//     body("user_name").isString().trim().notEmpty(),
+//     body("email").trim().isEmail().normalizeEmail(),
+//     body("phone_number").isString(),
+//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
+//     body("user_type").isString().trim().notEmpty(),
+//   ],
+//   phoneNumberValidation,
+//   validation,
+//   tokenValidation,
+//   shopAdminUserValidation,
+//   addUser
+// );
 
-router.put(
-  "/shop_admin/:id",
-  idValidation,
-  [
-    body("user_name").isString().trim().notEmpty(),
-    body("email").trim().isEmail().normalizeEmail(),
-    body("phone_number").isString(),
-    body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-    body("user_type").isString().trim().notEmpty(),
-  ],
-  phoneNumberValidation,
-  validation,
-  tokenValidation,
-  shopAdminUserValidation,
-  updateUser
-);
+// router.put(
+//   "/shop_admin/:id",
+//   idValidation,
+//   [
+//     body("user_name").isString().trim().notEmpty(),
+//     body("email").trim().isEmail().normalizeEmail(),
+//     body("phone_number").isString(),
+//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
+//     body("user_type").isString().trim().notEmpty(),
+//   ],
+//   phoneNumberValidation,
+//   validation,
+//   tokenValidation,
+//   shopAdminUserValidation,
+//   updateUser
+// );
 
-router.delete(
-  "/shop_admin/:id",
-  idValidation,
-  tokenValidation,
-  shopAdminUserTokenValidation,
-  deleteUser
-);
+// router.delete(
+//   "/shop_admin/:id",
+//   idValidation,
+//   tokenValidation,
+//   shopAdminUserTokenValidation,
+//   deleteUser
+// );
 
-// All Shop Admin API End
+// // All Shop Admin API End
 
-// All Shipper API Start
+// // All Shipper API Start
 
-router.post(
-  "/shipper/create",
-  [
-    body("user_name").isString().trim().notEmpty(),
-    body("email").trim().isEmail().normalizeEmail(),
-    body("phone_number").isString(),
-    body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-    body("user_type").isString().trim().notEmpty(),
-  ],
-  phoneNumberValidation,
-  validation,
-  tokenValidation,
-  shipperUserValidation,
-  addUser
-);
+// router.post(
+//   "/shipper/create",
+//   [
+//     body("user_name").isString().trim().notEmpty(),
+//     body("email").trim().isEmail().normalizeEmail(),
+//     body("phone_number").isString(),
+//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
+//     body("user_type").isString().trim().notEmpty(),
+//   ],
+//   phoneNumberValidation,
+//   validation,
+//   tokenValidation,
+//   shipperUserValidation,
+//   addUser
+// );
 
-router.put(
-  "/shipper/:id",
-  idValidation,
-  [
-    body("user_name").isString().trim().notEmpty(),
-    body("email").trim().isEmail().normalizeEmail(),
-    body("phone_number").isString(),
-    body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-    body("user_type").isString().trim().notEmpty(),
-  ],
-  phoneNumberValidation,
-  validation,
-  tokenValidation,
-  shipperUserValidation,
-  updateUser
-);
+// router.put(
+//   "/shipper/:id",
+//   idValidation,
+//   [
+//     body("user_name").isString().trim().notEmpty(),
+//     body("email").trim().isEmail().normalizeEmail(),
+//     body("phone_number").isString(),
+//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
+//     body("user_type").isString().trim().notEmpty(),
+//   ],
+//   phoneNumberValidation,
+//   validation,
+//   tokenValidation,
+//   shipperUserValidation,
+//   updateUser
+// );
 
-router.delete(
-  "/shipper/:id",
-  idValidation,
-  tokenValidation,
-  shipperUserTokenValidation,
-  deleteUser
-);
+// router.delete(
+//   "/shipper/:id",
+//   idValidation,
+//   tokenValidation,
+//   shipperUserTokenValidation,
+//   deleteUser
+// );
 
-// All Shipper Admin API End
+// // All Shipper Admin API End
 
 // User All API Start
 
@@ -164,74 +156,68 @@ router.post(
   "/user/create",
   [
     body("user_name").isString().trim().notEmpty(),
-    body("email").trim().isEmail().normalizeEmail(),
     body("phone_number").isString(),
-    body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-    body("user_type").isString().trim().notEmpty(),
   ],
   phoneNumberValidation,
   validation,
-  userValidation,
   addUser
 );
 
-router.put(
-  "/user/:id",
-  idValidation,
-  [
-    body("user_name").isString().trim().notEmpty(),
-    body("email").trim().isEmail().normalizeEmail(),
-    body("phone_number").isString(),
-    body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-    body("user_type").isString().trim().notEmpty(),
-  ],
-  phoneNumberValidation,
-  validation,
-  userValidation,
-  updateUser
-);
+// router.put(
+//   "/user/:id",
+//   idValidation,
+//   [
+//     body("user_name").isString().trim().notEmpty(),
+//     body("email").trim().isEmail().normalizeEmail(),
+//     body("phone_number").isString(),
+//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
+//     body("user_type").isString().trim().notEmpty(),
+//   ],
+//   phoneNumberValidation,
+//   validation,
+//   userValidation,
+//   updateUser
+// );
 
-router.delete(
-  "/user/:id",
-  idValidation,
-  tokenValidation,
-  shopAdminUserTokenValidation,
-  deleteUser
-);
+// router.delete(
+//   "/user/:id",
+//   idValidation,
+//   tokenValidation,
+//   shopAdminUserTokenValidation,
+//   deleteUser
+// );
 
-// User All API End
+// // User All API End
 
-// All User Login API Start
+// // All User Login API Start
 
 router.post(
   "/user/login",
-  [
-    body("email").trim().isEmail().normalizeEmail(),
-    body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-  ],
+  [body("phone_number").isString()],
   validation,
+  phoneNumberValidation,
   loginUser
 );
 
-// All User Login API End
+// // All User Login API End
 
-// All User Forgot Password API Start
+// // All User Forgot Password API Start
 
-router.post(
-  "/forgot-password",
-  [body("email").trim().isEmail().normalizeEmail()],
-  validation,
-  forgotPasswordUser
-);
+// router.post(
+//   "/forgot-password",
+//   [body("email").trim().isEmail().normalizeEmail()],
+//   validation,
+//   forgotPasswordUser
+// );
 
-router.post(
-  "/reset-password",
-  [body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 })],
-  validation,
-  tokenValidation,
-  resetPasswordUser
-);
+// router.post(
+//   "/reset-password",
+//   [body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 })],
+//   validation,
+//   tokenValidation,
+//   resetPasswordUser
+// );
 
-// All User Forget Password API End
+// // All User Forget Password API End
 
 module.exports = router;
