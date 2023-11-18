@@ -2,9 +2,10 @@ const express = require("express");
 const { body } = require("express-validator");
 
 const {
-  getUserOrders,
+  getUserOrder,
   placeOrder,
-  paidOrder,
+  getPaymentKey,
+  orderPaymentVerify,
   shopAcceptOrder,
   shipperAcceptOrder,
   deliveredOrder,
@@ -24,19 +25,15 @@ const { validation } = require("../validators/Validators");
 
 const router = express.Router();
 
-router.get("/orders/:id", idValidation, tokenValidation, getUserOrders);
+router.post("/order/placed", tokenValidation, placeOrder);
 
-router.post("/order/placed", tokenValidation, userTokenValidation, placeOrder);
+router.get("/order/getkey", tokenValidation, getPaymentKey);
 
-router.post(
-  "/order/paid/:id",
-  idValidation,
-  tokenValidation,
-  userTokenValidation,
-  [body("transition_id").isString().trim().notEmpty()],
-  validation,
-  paidOrder
-);
+router.get("/user/order", tokenValidation, getUserOrder);
+
+router.post("/order/payment/verify", orderPaymentVerify);
+
+// Done
 
 router.post(
   "/order/shop/accept/:id",

@@ -1,6 +1,7 @@
 // Package Import Start
 const express = require("express");
 const cors = require("cors");
+var bodyParser = require("body-parser");
 // Package Import End
 
 // Routes Import Start
@@ -21,6 +22,7 @@ const ImageUploadRoutes = require("./src/routes/S3Bucket.route");
 const UserRoutes = require("./src/routes/User.route");
 const CartRoutes = require("./src/routes/Cart.route");
 const OrderRoutes = require("./src/routes/Order.route");
+const PaymentRoutes = require("./src/routes/Payment.route");
 // Routes Import End
 
 // Constant Import Start
@@ -31,6 +33,7 @@ const { ROUTES } = require("./src/constants/Constants");
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // RD ADMIN Routes Start
 app.use(ROUTES.SUPER_ADMIN, PlaceRoutes);
@@ -54,6 +57,7 @@ app.use(ROUTES.ADMIN_PRODUCT, ProductRoutes);
 app.use(UserRoutes);
 app.use(CartRoutes);
 app.use(OrderRoutes);
+app.use(PaymentRoutes);
 app.use(ImageUploadRoutes);
 app.use(ROUTES.PRODUCT, ProductRatingRoutes);
 // ALL ACCESS ROUTES END

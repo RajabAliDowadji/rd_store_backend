@@ -1,3 +1,4 @@
+const crypto = require("crypto");
 const OrderModal = require("../models/Order.modal");
 const CartModal = require("../models/Cart.modal");
 const UserModal = require("../models/User.modal");
@@ -7,25 +8,7 @@ const { ORDER_API, COMMON } = require("../constants/Order.message");
 const { STATUS } = require("../constants/Constants");
 const { apiResponse } = require("../helpers/apiResponse");
 const { errorResponse } = require("../helpers/errorResponse");
-
-module.exports.getUserOrders = async (req, resp, next) => {
-  const user_id = req.params.id;
-  const pastOrders = await OrderModal.find({
-    user_id: user_id,
-    deliverd: true,
-  });
-  if (pastOrders) {
-    return resp
-      .status(STATUS.SUCCESS)
-      .send(
-        apiResponse(STATUS.SUCCESS, ORDER_API.ORDER_SUCCESS.message, pastOrders)
-      );
-  } else {
-    return resp
-      .status(STATUS.INTERNAL_SERVER)
-      .send(errorResponse(STATUS.INTERNAL_SERVER, COMMON.SERVER_ERROR.message));
-  }
-};
+const { instance } = require("../middlewares/paymentGateWay");
 
 module.exports.placeOrder = async (req, resp, next) => {
   const { user_id } = req;
@@ -39,7 +22,8 @@ module.exports.placeOrder = async (req, resp, next) => {
     _id: { $in: cartItem.cart_items.map((item) => item.product) },
   })
     .populate("product_brand")
-    .populate("commission");
+    .populate("commission")
+    .populate("product_images");
   if (cartItem) {
     cartItem.cart_items.map((item) => {
       return (total_qty = item.product_qty + total_qty);
@@ -66,11 +50,17 @@ module.exports.placeOrder = async (req, resp, next) => {
           product_size: product.product_size,
           product_price: product.product_price,
           product_description: product.product_description,
+          product_images: product.product_images,
         },
       });
-      commission_price +=
-        item.product_qty * product.commission.commission_price;
+      // commission_price +=
+      //   item.product_qty * product.commission.commission_price;
     });
+    const options = {
+      amount: total_price * 100,
+      currency: "INR",
+    };
+    const paymentDetails = await instance.orders.create(options);
     const orderBody = {
       total_qty: total_qty,
       total_price: total_price,
@@ -82,11 +72,17 @@ module.exports.placeOrder = async (req, resp, next) => {
         phone_number: user.phone_number,
       },
       order_item: orderItem,
+      payment_details: {
+        payment_id: paymentDetails.id,
+        amount: paymentDetails.amount,
+        amount_paid: paymentDetails.amount_paid,
+        amount_due: paymentDetails.amount_due,
+        currency: paymentDetails.currency,
+        payment_status: paymentDetails.status,
+      },
     };
     const order = new OrderModal(orderBody);
-
     await order.save();
-
     await CartModal.updateOne({ user: user_id }, { $set: { cart_items: [] } });
 
     return resp
@@ -101,21 +97,14 @@ module.exports.placeOrder = async (req, resp, next) => {
   }
 };
 
-module.exports.paidOrder = async (req, resp, next) => {
-  const orderId = req.params.id;
-  const { transition_id } = req.body;
-  const order = await OrderModal.findOne({ _id: orderId });
-
-  if (order) {
-    order.transition_id = transition_id;
-    order.paid = true;
-
-    await order.save();
-
+module.exports.getPaymentKey = async (req, resp, next) => {
+  const paymentaccessKeyId = process.env.RAZOR_ACCESS_KEY_ID;
+  if (paymentaccessKeyId) {
+    const access_key = { key: paymentaccessKeyId };
     return resp
       .status(STATUS.SUCCESS)
       .send(
-        apiResponse(STATUS.SUCCESS, ORDER_API.ORDER_PAYMENT.message, order)
+        apiResponse(STATUS.SUCCESS, ORDER_API.ORDER_SUCCESS.message, access_key)
       );
   } else {
     return resp
@@ -123,6 +112,55 @@ module.exports.paidOrder = async (req, resp, next) => {
       .send(errorResponse(STATUS.INTERNAL_SERVER, COMMON.SERVER_ERROR.message));
   }
 };
+
+module.exports.getUserOrder = async (req, resp, next) => {
+  const { user_id } = req;
+  const paymentaccessKeyId = process.env.RAZOR_ACCESS_KEY_ID;
+  const Order = await OrderModal.findOne({
+    user_id: user_id,
+    paid: false,
+  });
+
+  if (Order) {
+    Order.access_key = paymentaccessKeyId;
+    return resp
+      .status(STATUS.SUCCESS)
+      .send(
+        apiResponse(STATUS.SUCCESS, ORDER_API.ORDER_SUCCESS.message, Order)
+      );
+  } else {
+    return resp
+      .status(STATUS.INTERNAL_SERVER)
+      .send(errorResponse(STATUS.INTERNAL_SERVER, COMMON.SERVER_ERROR.message));
+  }
+};
+
+module.exports.orderPaymentVerify = async (req, resp, next) => {
+  const secretpaymentaccessKeyId = process.env.RAZOR_SECRET_KEY;
+
+  const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
+    req.body;
+
+  const generated_signature = crypto
+    .createHmac("sha256", secretpaymentaccessKeyId)
+    .update((razorpay_order_id + "|" + razorpay_payment_id).toString())
+    .digest("hex");
+
+  if (razorpay_signature === generated_signature) {
+    await OrderModal.updateOne(
+      { "payment_details.payment_id": razorpay_order_id },
+      {
+        transition_id: razorpay_payment_id,
+        paid: razorpay_signature === generated_signature,
+      }
+    );
+    return resp.redirect(process.env.FE_BASE_URL);
+  } else {
+    return resp.redirect(process.env.FE_BASE_URL + "cart");
+  }
+};
+
+// Done till Here
 
 module.exports.shopAcceptOrder = async (req, resp, next) => {
   const orderId = req.params.id;

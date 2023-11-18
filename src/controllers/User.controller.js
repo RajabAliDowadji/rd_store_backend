@@ -1,6 +1,6 @@
 require("dotenv").config();
 const UserModal = require("../models/User.modal");
-const bcrypt = require("bcryptjs");
+const CartModal = require("../models/Cart.modal");
 const jwt = require("jsonwebtoken");
 const { USER_API, LOGIN_API, COMMON } = require("../constants/User.message");
 const { STATUS } = require("../constants/Constants");
@@ -25,6 +25,19 @@ module.exports.addUser = async (req, resp, next) => {
       }
     );
     user.token = token;
+    const cartItem = await CartModal.findOne({ user: user._id }).populate(
+      "cart_items.product"
+    );
+    if (cartItem) {
+      user.cart_item = cartItem.cart_items;
+    } else {
+      const cart = new CartModal({
+        user: user._id,
+        cart_items: [],
+      });
+
+      await cart.save();
+    }
     return resp
       .status(STATUS.CREATED)
       .send(apiResponse(STATUS.CREATED, USER_API.USER_CREATE.message, user));
@@ -47,6 +60,19 @@ module.exports.loginUser = async (req, resp, next) => {
       }
     );
     user.token = token;
+    const cartItem = await CartModal.findOne({ user: user._id }).populate(
+      "cart_items.product"
+    );
+    if (cartItem) {
+      user.cart_item = cartItem.cart_items;
+    } else {
+      const cart = new CartModal({
+        user: user._id,
+        cart_items: [],
+      });
+
+      await cart.save();
+    }
     return resp
       .status(STATUS.SUCCESS)
       .send(

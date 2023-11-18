@@ -28,7 +28,37 @@ const OrderSchema = Schema(
     transition_id: {
       type: String,
       required: false,
-      default: false,
+      default: null,
+    },
+    access_key: {
+      type: String,
+      required: false,
+    },
+    payment_details: {
+      payment_id: {
+        type: String,
+        required: true,
+      },
+      amount: {
+        type: Number,
+        required: true,
+      },
+      amount_paid: {
+        type: Number,
+        required: true,
+      },
+      amount_due: {
+        type: Number,
+        required: true,
+      },
+      currency: {
+        type: String,
+        required: true,
+      },
+      payment_status: {
+        type: String,
+        required: true,
+      },
     },
     shop_accepted: {
       type: Boolean,
@@ -63,7 +93,8 @@ const OrderSchema = Schema(
       },
       email: {
         type: String,
-        required: true,
+        required: false,
+        default: null,
       },
       phone_number: {
         type: String,
@@ -102,6 +133,26 @@ const OrderSchema = Schema(
             type: String,
             required: true,
           },
+          product_images: [
+            {
+              file_name: {
+                type: String,
+                required: true,
+              },
+              file_size: {
+                type: Number,
+                required: true,
+              },
+              file_key: {
+                type: String,
+                required: true,
+              },
+              file_url: {
+                type: String,
+                required: true,
+              },
+            },
+          ],
         },
       },
     ],
