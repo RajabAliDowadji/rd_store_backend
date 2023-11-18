@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const ProductTypeModal = require("../models/ProductType.modal");
 const ProductCategoriesModal = require("../models/ProductCategories.modal");
 const ProductSubCategoriesModal = require("../models/ProductSubCategories.modal");
 const ProductBrandModal = require("../models/ProductBrand.modal");
@@ -14,29 +13,6 @@ module.exports.idValidation = (req, resp, next) => {
   const id = req.params.id;
   if (mongoose.isValidObjectId(id)) {
     next();
-  } else {
-    return resp
-      .status(STATUS.BAD)
-      .send(errorResponse(STATUS.BAD, COMMON_ERROR.INVALID_ID.message));
-  }
-};
-
-module.exports.productTypeValidation = async (req, resp, next) => {
-  const id = req.body.product_type;
-  if (mongoose.isValidObjectId(id)) {
-    const prodType = await ProductTypeModal.findOne({ _id: id });
-    if (prodType) {
-      next();
-    } else {
-      return resp
-        .status(STATUS.BAD)
-        .send(
-          errorResponse(
-            STATUS.BAD,
-            "Product type " + COMMON_ERROR.NOT_FOUND.message
-          )
-        );
-    }
   } else {
     return resp
       .status(STATUS.BAD)
