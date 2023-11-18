@@ -19,19 +19,14 @@ const UserSchema = Schema(
       type: String,
       require: false,
     },
-    cart_items: [
-      {
-        product_qty: {
-          type: Number,
-          required: false,
-        },
-        product: {
-          type: Schema.Types.ObjectId,
-          ref: "product",
-          required: false,
-        },
-      },
-    ],
+    password: {
+      type: String,
+      required: false,
+    },
+    user_type: {
+      type: String,
+      required: false,
+    },
   },
 
   { timestamps: true, versionKey: false }

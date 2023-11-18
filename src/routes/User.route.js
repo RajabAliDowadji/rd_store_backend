@@ -1,156 +1,53 @@
 const express = require("express");
 const { body } = require("express-validator");
 
-const { addUser, loginUser } = require("../controllers/User.controller");
+const {
+  createUser,
+  loginUser,
+  createRDAdminUser,
+  loginRDAdminUser,
+} = require("../controllers/User.controller");
 
 const {
   phoneNumberValidation,
 } = require("../validators/PhoneNumberValidators");
 
-const {
-  rdAdminValidation,
-  shopAdminUserValidation,
-  shipperUserValidation,
-  shopAdminUserTokenValidation,
-  shipperUserTokenValidation,
-  userValidation,
-} = require("../validators/userTypeValidators");
+const { rdAdminValidation } = require("../validators/userTypeValidators");
 
 const { validation } = require("../validators/Validators");
 
-const { idValidation } = require("../middlewares/IdValidation");
-
-const { tokenValidation } = require("../validators/tokenValidators");
-
 const router = express.Router();
 
-// // Get All types of users
-// router.get("/users", getUsers);
+// RD Admin API Start
 
-// // All Super Admin API Start
-// router.post(
-//   "/rd_admin/create",
-//   [
-//     body("user_name").isString().trim().notEmpty(),
-//     body("email").trim().isEmail().normalizeEmail(),
-//     body("phone_number").isString(),
-//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-//     body("user_type").isString().trim().notEmpty(),
-//   ],
-//   phoneNumberValidation,
-//   validation,
-//   rdAdminValidation,
-//   addUser
-// );
+router.post(
+  "/rd_admin/create",
+  [
+    body("user_name").isString().trim().notEmpty(),
+    body("email").trim().isEmail().normalizeEmail(),
+    body("phone_number").isString(),
+    body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
+    body("user_type").isString().trim().notEmpty(),
+  ],
+  phoneNumberValidation,
+  validation,
+  rdAdminValidation,
+  createRDAdminUser
+);
 
-// router.put(
-//   "/rd_admin/:id",
-//   idValidation,
-//   [
-//     body("user_name").isString().trim().notEmpty(),
-//     body("email").trim().isEmail().normalizeEmail(),
-//     body("phone_number").isString(),
-//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-//     body("user_type").isString().trim().notEmpty(),
-//   ],
-//   phoneNumberValidation,
-//   validation,
-//   rdAdminValidation,
-//   updateUser
-// );
+router.post(
+  "/rd_admin/login",
+  [
+    body("email").trim().isEmail().normalizeEmail(),
+    body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
+  ],
+  validation,
+  loginRDAdminUser
+);
 
-// // All Super Admin API End
+// RD Admin API End
 
-// // All Shop Admin API Start
-// router.post(
-//   "/shop_admin/create",
-//   [
-//     body("user_name").isString().trim().notEmpty(),
-//     body("email").trim().isEmail().normalizeEmail(),
-//     body("phone_number").isString(),
-//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-//     body("user_type").isString().trim().notEmpty(),
-//   ],
-//   phoneNumberValidation,
-//   validation,
-//   tokenValidation,
-//   shopAdminUserValidation,
-//   addUser
-// );
-
-// router.put(
-//   "/shop_admin/:id",
-//   idValidation,
-//   [
-//     body("user_name").isString().trim().notEmpty(),
-//     body("email").trim().isEmail().normalizeEmail(),
-//     body("phone_number").isString(),
-//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-//     body("user_type").isString().trim().notEmpty(),
-//   ],
-//   phoneNumberValidation,
-//   validation,
-//   tokenValidation,
-//   shopAdminUserValidation,
-//   updateUser
-// );
-
-// router.delete(
-//   "/shop_admin/:id",
-//   idValidation,
-//   tokenValidation,
-//   shopAdminUserTokenValidation,
-//   deleteUser
-// );
-
-// // All Shop Admin API End
-
-// // All Shipper API Start
-
-// router.post(
-//   "/shipper/create",
-//   [
-//     body("user_name").isString().trim().notEmpty(),
-//     body("email").trim().isEmail().normalizeEmail(),
-//     body("phone_number").isString(),
-//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-//     body("user_type").isString().trim().notEmpty(),
-//   ],
-//   phoneNumberValidation,
-//   validation,
-//   tokenValidation,
-//   shipperUserValidation,
-//   addUser
-// );
-
-// router.put(
-//   "/shipper/:id",
-//   idValidation,
-//   [
-//     body("user_name").isString().trim().notEmpty(),
-//     body("email").trim().isEmail().normalizeEmail(),
-//     body("phone_number").isString(),
-//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-//     body("user_type").isString().trim().notEmpty(),
-//   ],
-//   phoneNumberValidation,
-//   validation,
-//   tokenValidation,
-//   shipperUserValidation,
-//   updateUser
-// );
-
-// router.delete(
-//   "/shipper/:id",
-//   idValidation,
-//   tokenValidation,
-//   shipperUserTokenValidation,
-//   deleteUser
-// );
-
-// // All Shipper Admin API End
-
-// User All API Start
+// User API Start
 
 router.post(
   "/user/create",
@@ -160,36 +57,8 @@ router.post(
   ],
   phoneNumberValidation,
   validation,
-  addUser
+  createUser
 );
-
-// router.put(
-//   "/user/:id",
-//   idValidation,
-//   [
-//     body("user_name").isString().trim().notEmpty(),
-//     body("email").trim().isEmail().normalizeEmail(),
-//     body("phone_number").isString(),
-//     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-//     body("user_type").isString().trim().notEmpty(),
-//   ],
-//   phoneNumberValidation,
-//   validation,
-//   userValidation,
-//   updateUser
-// );
-
-// router.delete(
-//   "/user/:id",
-//   idValidation,
-//   tokenValidation,
-//   shopAdminUserTokenValidation,
-//   deleteUser
-// );
-
-// // User All API End
-
-// // All User Login API Start
 
 router.post(
   "/user/login",
@@ -198,26 +67,6 @@ router.post(
   phoneNumberValidation,
   loginUser
 );
-
-// // All User Login API End
-
-// // All User Forgot Password API Start
-
-// router.post(
-//   "/forgot-password",
-//   [body("email").trim().isEmail().normalizeEmail()],
-//   validation,
-//   forgotPasswordUser
-// );
-
-// router.post(
-//   "/reset-password",
-//   [body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 })],
-//   validation,
-//   tokenValidation,
-//   resetPasswordUser
-// );
-
-// // All User Forget Password API End
+//  All User Login API End
 
 module.exports = router;
