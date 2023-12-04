@@ -3,16 +3,13 @@ const { body } = require("express-validator");
 
 const {
   getProductsRatings,
-  addProductRatings,
-  deleteProductRatings,
+  addUpdateProductRatings,
 } = require("../controllers/ProductRating.controller");
 
 const {
   idValidation,
   productValidation,
 } = require("../middlewares/IdValidation");
-
-const { validation } = require("../validators/Validators");
 
 const { tokenValidation } = require("../validators/tokenValidators");
 
@@ -27,21 +24,6 @@ router.get(
   getProductsRatings
 );
 
-router.post(
-  "/rating/create",
-  tokenValidation,
-  productValidation,
-  addProductRatings
-);
-
-router.put("/rating", tokenValidation, productValidation, addProductRatings);
-
-router.delete(
-  "/rating/:id",
-  idValidation,
-  tokenValidation,
-  rdAdminTokenValidation,
-  deleteProductRatings
-);
+router.post("/product/rating", productValidation, addUpdateProductRatings);
 
 module.exports = router;

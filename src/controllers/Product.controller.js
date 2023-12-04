@@ -1,7 +1,6 @@
 const ProductModal = require("../models/Product.modal");
 const CommissionModal = require("../models/Commission.modal");
 const ProductRatingModal = require("../models/ProductRating.modal");
-const ProductInventoriesModal = require("../models/ProductInventories.modal");
 const { PROD_API, COMMON } = require("../constants/Product.messages");
 const { STATUS, ACCOUNTTYPE } = require("../constants/Constants");
 const { apiResponse } = require("../helpers/apiResponse");
@@ -20,11 +19,46 @@ module.exports.getProducts = async (req, resp, next) => {
     };
   } else if (product_category) {
     queryData = {
-      $or: [{ product_category: product_category }],
+      $and: [{ product_category: product_category, is_published: true }],
+    };
+  }
+  const products = await ProductModal.find({ is_published: true, ...queryData })
+    .populate("product_rating")
+    .populate("product_sub_category")
+    .populate("product_brand")
+    .populate("product_category")
+    .populate("product_images");
+  if (products) {
+    return resp
+      .status(STATUS.SUCCESS)
+      .send(
+        apiResponse(STATUS.SUCCESS, PROD_API.PROD_SUCCESS.message, products)
+      );
+  } else {
+    return resp
+      .status(STATUS.INTERNAL_SERVER)
+      .send(errorResponse(STATUS.INTERNAL_SERVER, COMMON.SERVER_ERROR.message));
+  }
+};
+
+module.exports.getAdminProducts = async (req, resp, next) => {
+  const product_category = req.query.product_category;
+  const product_sub_category = req.query.product_sub_category;
+  let queryData = {};
+  if (product_category && product_sub_category) {
+    queryData = {
+      $and: [
+        { product_sub_category: product_sub_category },
+        { product_category: product_category },
+      ],
+    };
+  } else if (product_category) {
+    queryData = {
+      $and: [{ product_category: product_category }],
     };
   }
   const products = await ProductModal.find(queryData)
-    .populate("rating")
+    .populate("product_rating")
     .populate("product_sub_category")
     .populate("product_brand")
     .populate("product_category")
@@ -49,7 +83,7 @@ module.exports.getProductById = async (req, resp, next) => {
     .populate("product_brand")
     .populate("product_category")
     .populate("product_images")
-    .populate("rating");
+    .populate("product_rating");
   if (product) {
     return resp
       .status(STATUS.SUCCESS)
@@ -139,9 +173,6 @@ module.exports.deleteProduct = async (req, resp, next) => {
   const productId = req.params.id;
   const product = await ProductModal.findOne({ _id: productId });
   if (product) {
-    await ProductInventoriesModal.findOneAndDelete({
-      product: productId,
-    });
     await CommissionModal.findOneAndDelete({
       product: productId,
     });

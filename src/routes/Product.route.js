@@ -4,6 +4,7 @@ const { body } = require("express-validator");
 const {
   addProduct,
   getProducts,
+  getAdminProducts,
   deleteProduct,
   updateProduct,
   getProductById,
@@ -27,11 +28,26 @@ const {
 
 const router = express.Router();
 
-router.get("/", getProducts);
-router.get("/:id", getProductById);
+router.get("/product", getProducts);
+
+router.get(
+  "/admin/product",
+  tokenValidation,
+  adminTokenValidation,
+  getAdminProducts
+);
+
+router.get("/product/:id", getProductById);
+
+router.get(
+  "/admin/product/:id",
+  tokenValidation,
+  adminTokenValidation,
+  getProductById
+);
 
 router.post(
-  "/create",
+  "/admin/product/create",
   tokenValidation,
   adminTokenValidation,
   [
@@ -48,7 +64,7 @@ router.post(
 );
 
 router.put(
-  "/:id",
+  "/admin/product/:id",
   idValidation,
   tokenValidation,
   adminTokenValidation,
@@ -66,7 +82,7 @@ router.put(
 );
 
 router.delete(
-  "/:id",
+  "/admin/product/:id",
   idValidation,
   tokenValidation,
   rdAdminTokenValidation,

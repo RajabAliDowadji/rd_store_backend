@@ -12,7 +12,6 @@ const ProductCategoriesRoutes = require("./src/routes/ProductCategories.route");
 const ProductSubCategoriesRoutes = require("./src/routes/ProductSubCategories.route");
 const ProductBrandRoutes = require("./src/routes/ProductBrand.route");
 const ProductRoutes = require("./src/routes/Product.route");
-const ProductInventoriesRoutes = require("./src/routes/ProductInventories.route");
 const ProductRatingRoutes = require("./src/routes/ProductRating.route");
 const CommissionTypeRoutes = require("./src/routes/CommissionType.route");
 const CommissionRoutes = require("./src/routes/Commission.route");
@@ -41,14 +40,13 @@ app.use(ROUTES.SUPER_ADMIN, ShopCategoriesRoutes);
 app.use(ROUTES.SUPER_ADMIN, ShopRoutes);
 app.use(ROUTES.SUPER_ADMIN, CommissionRoutes);
 app.use(ROUTES.SUPER_ADMIN, AdminCommissionRoutes);
-app.use(ROUTES.SUPER_ADMIN_PRODUCT, ProductCategoriesRoutes);
-app.use(ROUTES.SUPER_ADMIN_PRODUCT, ProductSubCategoriesRoutes);
-app.use(ROUTES.SUPER_ADMIN_PRODUCT, ProductBrandRoutes);
+app.use(ROUTES.PRODUCT, ProductCategoriesRoutes);
+app.use(ROUTES.PRODUCT, ProductSubCategoriesRoutes);
+app.use(ROUTES.PRODUCT, ProductBrandRoutes);
 // RD ADMIN Routes End
 
 // RD ADMIN AND SHOP ADMIN START
-app.use(ROUTES.ADMIN_PRODUCT, ProductInventoriesRoutes);
-app.use(ROUTES.ADMIN_PRODUCT, ProductRoutes);
+app.use(ProductRoutes);
 // RD ADMIN AND SHOP ADMIN END
 
 // ALL ACCESS ROUTES START
@@ -57,7 +55,7 @@ app.use(CartRoutes);
 app.use(OrderRoutes);
 app.use(PaymentRoutes);
 app.use(ImageUploadRoutes);
-app.use(ROUTES.PRODUCT, ProductRatingRoutes);
+app.use(ProductRatingRoutes);
 // ALL ACCESS ROUTES END
 
 app.listen(5000);

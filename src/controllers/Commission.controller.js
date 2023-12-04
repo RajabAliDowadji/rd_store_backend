@@ -63,6 +63,13 @@ module.exports.addCommission = async (req, resp, next) => {
       commission_price: commission_price,
       product: productId,
     });
+    await ProductModal.findOneAndUpdate(
+      { _id: productId },
+      {
+        commission: commissionmodal._id,
+        is_published: true,
+      }
+    );
     const productRatingmodal = new ProductRatingModal({
       product: productId,
     });
@@ -73,8 +80,8 @@ module.exports.addCommission = async (req, resp, next) => {
       { _id: productId },
       {
         commission: commissionmodal._id,
-        rating: productRating._id,
-        is_published: product.inventory != null ? true : false,
+        product_rating: productRating._id,
+        is_published: true,
       }
     );
     return resp

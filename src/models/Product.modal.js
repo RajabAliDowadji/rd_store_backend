@@ -34,16 +34,11 @@ const ProductSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "commission",
       required: false,
+      default: null,
     },
     rating: {
       type: Schema.Types.ObjectId,
       ref: "product_rating",
-      required: false,
-      default: null,
-    },
-    inventory: {
-      type: Schema.Types.ObjectId,
-      ref: "product_inverntories",
       required: false,
       default: null,
     },
