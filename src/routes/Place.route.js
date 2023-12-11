@@ -20,10 +20,10 @@ const { tokenValidation } = require("../validators/tokenValidators");
 
 const router = express.Router();
 
-router.get("/places", tokenValidation, rdAdminTokenValidation, getPlaces);
+router.get("/places", tokenValidation, getPlaces);
 
 router.get(
-  "/place/:id",
+  "/rd_admin/place/:id",
   idValidation,
   tokenValidation,
   rdAdminTokenValidation,
@@ -31,7 +31,7 @@ router.get(
 );
 
 router.post(
-  "/place",
+  "/rd_admin/place",
   [body("pincode").trim().isLength({ min: 6, max: 6 })],
   tokenValidation,
   rdAdminTokenValidation,
@@ -40,7 +40,7 @@ router.post(
 );
 
 router.post(
-  "/place/create",
+  "/rd_admin/place/create",
   [body("pincode").trim().isLength({ min: 6, max: 6 })],
   pinCodeValidation,
   tokenValidation,
@@ -49,7 +49,7 @@ router.post(
 );
 
 router.put(
-  "/place/:id",
+  "/rd_admin/place/:id",
   idValidation,
   [body("pincode").trim().isLength({ min: 6, max: 6 })],
   pinCodeValidation,
@@ -59,7 +59,7 @@ router.put(
 );
 
 router.delete(
-  "/place/:id",
+  "/rd_admin/place/:id",
   idValidation,
   tokenValidation,
   rdAdminTokenValidation,

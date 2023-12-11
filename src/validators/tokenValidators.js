@@ -17,9 +17,9 @@ module.exports.tokenValidation = async (req, resp, next) => {
     decodedToken = jwt.verify(token, process.env.JWT_TOCKEN_KEY);
   } catch (err) {
     return resp
-      .status(STATUS.INTERNAL_SERVER)
+      .status(STATUS.UNAUTHORIZE)
       .send(
-        errorResponse(STATUS.INTERNAL_SERVER, COMMON_ERROR.SERVER_ERROR.message)
+        errorResponse(STATUS.UNAUTHORIZE, COMMON_ERROR.TOKEN_EXPIRED.message)
       );
   }
   if (!decodedToken) {

@@ -47,6 +47,36 @@ module.exports = {
       status: 400,
     },
   },
+  USER_ADD_API: {
+    USER_ADD_SUCCESS: {
+      message: "Ok",
+      status: 200,
+    },
+    USER_ADD_CREATE: {
+      message: "User address created successfully.",
+      status: 201,
+    },
+    USER_ADD_UPDATE: {
+      message: "User address updated successfully.",
+      status: 200,
+    },
+    USER_ADD_ALREADY_REGISTER: {
+      message: "User address already existed.",
+      status: 400,
+    },
+    USER_ADD_DELETE: {
+      message: "User address deleted successfully.",
+      status: 200,
+    },
+    USER_ADD_NOT_FOUND: {
+      message: "User not found.",
+      status: 400,
+    },
+    USER_ADD_INVALID_ID: {
+      message: "Please provide valid User address id.",
+      status: 400,
+    },
+  },
   LOGIN_API: {
     LOGIN_API_SUCCESS: {
       message: "User login successfully.",
