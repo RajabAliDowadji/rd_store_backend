@@ -21,7 +21,6 @@ const UserRoutes = require("./src/routes/User.route");
 const CartRoutes = require("./src/routes/Cart.route");
 const OrderRoutes = require("./src/routes/Order.route");
 const PaymentRoutes = require("./src/routes/Payment.route");
-const UserAddressRoutes = require("./src/routes/UserAddress.route");
 // Routes Import End
 
 // Constant Import Start
@@ -57,7 +56,6 @@ app.use(OrderRoutes);
 app.use(PaymentRoutes);
 app.use(ImageUploadRoutes);
 app.use(ProductRatingRoutes);
-app.use(UserAddressRoutes);
 // ALL ACCESS ROUTES END
 
 app.listen(5000);
