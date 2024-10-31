@@ -5,7 +5,7 @@ module.exports = {
       status: 500,
     },
     VALIDATE_ERROR: {
-      message: "Upper range should be greather than lower range.",
+      message: "Upper range should be greater than lower range.",
       status: 400,
     },
     PHONE_NUMBER_ERROR: {
@@ -21,33 +21,33 @@ module.exports = {
       status: 400,
     },
   },
-  SHOP_CAT_API: {
-    SHOP_CAT_SUCCESS: {
+  SHOP_BAD_API: {
+    SHOP_BAD_SUCCESS: {
       message: "Ok",
       status: 200,
     },
-    SHOP_CAT_CREATE: {
-      message: "Shop category registered successfully.",
+    SHOP_BAD_CREATE: {
+      message: "Shop badge registered successfully.",
       status: 201,
     },
-    SHOP_CAT_UPDATE: {
-      message: "Shop category updated successfully.",
+    SHOP_BAD_UPDATE: {
+      message: "Shop badge updated successfully.",
       status: 200,
     },
-    SHOP_CAT_ALREADY_REGISTER: {
-      message: "Shop category already existed.",
+    SHOP_BAD_ALREADY_REGISTER: {
+      message: "Shop badge already existed.",
       status: 400,
     },
-    SHOP_CAT_DELETE: {
-      message: "Shop category deleted successfully.",
+    SHOP_BAD_DELETE: {
+      message: "Shop badge deleted successfully.",
       status: 200,
     },
-    SHOP_CAT_NOT_FOUND: {
-      message: "Shop category not found.",
+    SHOP_BAD_NOT_FOUND: {
+      message: "Shop badge not found.",
       status: 400,
     },
-    SHOP_CAT_INVALID_ID: {
-      message: "Please provide valid shop category id.",
+    SHOP_BAD_INVALID_ID: {
+      message: "Please provide valid shop badge id.",
       status: 400,
     },
   },

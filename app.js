@@ -21,11 +21,16 @@ const UserRoutes = require("./src/routes/User.route");
 const CartRoutes = require("./src/routes/Cart.route");
 const OrderRoutes = require("./src/routes/Order.route");
 const PaymentRoutes = require("./src/routes/Payment.route");
+
+const MerchantBadges = require("./src/routes/MerchantBadge.route");
 // Routes Import End
 
 // Constant Import Start
 require("./src/services/connection");
 const { ROUTES } = require("./src/constants/Constants");
+const {
+  superAdminAuthValidation,
+} = require("./src/validators/SuperAdminTokenValidation");
 // Constant Import End
 
 const app = express();
@@ -43,6 +48,8 @@ app.use(ROUTES.SUPER_ADMIN, AdminCommissionRoutes);
 app.use(ROUTES.PRODUCT, ProductCategoriesRoutes);
 app.use(ROUTES.PRODUCT, ProductSubCategoriesRoutes);
 app.use(ROUTES.PRODUCT, ProductBrandRoutes);
+
+app.use(ROUTES.ROOT, superAdminAuthValidation, MerchantBadges);
 // RD ADMIN Routes End
 
 // RD ADMIN AND SHOP ADMIN START

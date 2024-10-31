@@ -3,10 +3,10 @@ const { COMMON } = require("../constants/Shop.messages");
 const { errorResponse } = require("../helpers/errorResponse");
 const { validationResult } = require("express-validator");
 
-module.exports.RangeValidation = (req, resp, next) => {
+module.exports.salesRangeValidation = (req, resp, next) => {
   const errors = validationResult(req);
-  const lower_range = req.body.lower_range;
-  const upper_range = req.body.upper_range;
+  const lower_range = req.body.sales_min;
+  const upper_range = req.body.sales_max;
   if (!errors.isEmpty()) {
     return resp
       .status(STATUS.BAD)
