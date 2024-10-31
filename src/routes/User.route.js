@@ -3,70 +3,51 @@ const { body } = require("express-validator");
 
 const {
   createUser,
+  updateUser,
+  deleteUser,
+  getUser,
   loginUser,
-  createRDAdminUser,
-  loginRDAdminUser,
 } = require("../controllers/User.controller");
 
 const {
   phoneNumberValidation,
 } = require("../validators/PhoneNumberValidators");
 
-const { rdAdminValidation } = require("../validators/userTypeValidators");
-
 const { validation } = require("../validators/Validators");
+const { tokenValidation } = require("../validators/tokenValidators");
 
 const router = express.Router();
 
-// RD Admin API Start
-
 router.post(
-  "/rd_admin/create",
+  "/create/user",
   [
-    body("user_name").isString().trim().notEmpty(),
-    body("email").trim().isEmail().normalizeEmail(),
-    body("phone_number").isString(),
     body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-    body("user_type").isString().trim().notEmpty(),
-  ],
-  phoneNumberValidation,
-  validation,
-  rdAdminValidation,
-  createRDAdminUser
-);
-
-router.post(
-  "/rd_admin/login",
-  [
-    body("email").trim().isEmail().normalizeEmail(),
-    body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 }),
-  ],
-  validation,
-  loginRDAdminUser
-);
-
-// RD Admin API End
-
-// User API Start
-
-router.post(
-  "/user/create",
-  [
-    body("user_name").isString().trim().notEmpty(),
-    body("phone_number").isString(),
+    body("name").isString().trim().notEmpty(),
   ],
   phoneNumberValidation,
   validation,
   createUser
 );
 
+router.put(
+  "/update/user/:id",
+  [body("name").isString().trim().notEmpty()],
+  tokenValidation,
+  phoneNumberValidation,
+  validation,
+  updateUser
+);
+
+router.delete("/delete/user/:id", tokenValidation, deleteUser);
+
+router.get("/get/user/:id", tokenValidation, getUser);
+
 router.post(
   "/user/login",
-  [body("phone_number").isString()],
-  validation,
+  [body("password").isString().trim().notEmpty().isLength({ min: 8, max: 16 })],
   phoneNumberValidation,
+  validation,
   loginUser
 );
-//  All User Login API End
 
 module.exports = router;

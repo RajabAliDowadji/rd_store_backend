@@ -18,6 +18,10 @@ module.exports = {
       message: "Image added successfully.",
       status: 201,
     },
+    BUCKET_UPDATE: {
+      message: "Image updated successfully.",
+      status: 200,
+    },
     BUCKET_DELETE: {
       message: "Image deleted successfully.",
       status: 200,

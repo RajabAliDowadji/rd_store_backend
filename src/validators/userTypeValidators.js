@@ -1,9 +1,13 @@
-const { STATUS, ACCOUNTTYPE, COMMON_ERROR } = require("../constants/Constants");
+const {
+  STATUS,
+  ACCOUNT_TYPE,
+  COMMON_ERROR,
+} = require("../constants/Constants");
 const { errorResponse } = require("../helpers/errorResponse");
 
 module.exports.rdAdminValidation = async (req, resp, next) => {
   const { user_type } = req.body;
-  if (user_type != ACCOUNTTYPE.SUPER_ADMIN) {
+  if (user_type != ACCOUNT_TYPE.SUPER_ADMIN) {
     return resp
       .status(STATUS.UNAUTHORIZE)
       .send(
@@ -15,7 +19,7 @@ module.exports.rdAdminValidation = async (req, resp, next) => {
 };
 
 module.exports.rdAdminTokenValidation = async (req, resp, next) => {
-  if (req.user_type != ACCOUNTTYPE.SUPER_ADMIN) {
+  if (req.user_type != ACCOUNT_TYPE.SUPER_ADMIN) {
     return resp
       .status(STATUS.UNAUTHORIZE)
       .send(
@@ -28,8 +32,8 @@ module.exports.rdAdminTokenValidation = async (req, resp, next) => {
 
 module.exports.adminTokenValidation = async (req, resp, next) => {
   if (
-    req.user_type != ACCOUNTTYPE.SUPER_ADMIN &&
-    req.user_type != ACCOUNTTYPE.SHOP_ADMIN
+    req.user_type != ACCOUNT_TYPE.SUPER_ADMIN &&
+    req.user_type != ACCOUNT_TYPE.SHOP_ADMIN
   ) {
     return resp
       .status(STATUS.UNAUTHORIZE)
@@ -44,8 +48,8 @@ module.exports.adminTokenValidation = async (req, resp, next) => {
 module.exports.shopAdminUserValidation = async (req, resp, next) => {
   const { user_type } = req.body;
   if (
-    req.user_type != ACCOUNTTYPE.SUPER_ADMIN ||
-    user_type != ACCOUNTTYPE.SHOP_ADMIN
+    req.user_type != ACCOUNT_TYPE.SUPER_ADMIN ||
+    user_type != ACCOUNT_TYPE.SHOP_ADMIN
   ) {
     return resp
       .status(STATUS.UNAUTHORIZE)
@@ -58,7 +62,7 @@ module.exports.shopAdminUserValidation = async (req, resp, next) => {
 };
 
 module.exports.shopAdminUserTokenValidation = async (req, resp, next) => {
-  if (req.user_type != ACCOUNTTYPE.SUPER_ADMIN) {
+  if (req.user_type != ACCOUNT_TYPE.SUPER_ADMIN) {
     return resp
       .status(STATUS.UNAUTHORIZE)
       .send(
@@ -70,7 +74,7 @@ module.exports.shopAdminUserTokenValidation = async (req, resp, next) => {
 };
 
 module.exports.shopUserTokenValidation = async (req, resp, next) => {
-  if (req.user_type != ACCOUNTTYPE.SHOP_ADMIN) {
+  if (req.user_type != ACCOUNT_TYPE.SHOP_ADMIN) {
     return resp
       .status(STATUS.UNAUTHORIZE)
       .send(
@@ -84,8 +88,8 @@ module.exports.shopUserTokenValidation = async (req, resp, next) => {
 module.exports.shipperUserValidation = async (req, resp, next) => {
   const { user_type } = req.body;
   if (
-    req.user_type != ACCOUNTTYPE.SHOP_ADMIN ||
-    user_type != ACCOUNTTYPE.SHIPPER
+    req.user_type != ACCOUNT_TYPE.SHOP_ADMIN ||
+    user_type != ACCOUNT_TYPE.SHIPPER
   ) {
     return resp
       .status(STATUS.UNAUTHORIZE)
@@ -98,7 +102,7 @@ module.exports.shipperUserValidation = async (req, resp, next) => {
 };
 
 module.exports.shipperLoginUserValidation = async (req, resp, next) => {
-  if (req.user_type != ACCOUNTTYPE.SHIPPER) {
+  if (req.user_type != ACCOUNT_TYPE.SHIPPER) {
     return resp
       .status(STATUS.UNAUTHORIZE)
       .send(
@@ -110,7 +114,7 @@ module.exports.shipperLoginUserValidation = async (req, resp, next) => {
 };
 
 module.exports.shipperUserTokenValidation = async (req, resp, next) => {
-  if (req.user_type != ACCOUNTTYPE.SHOP_ADMIN) {
+  if (req.user_type != ACCOUNT_TYPE.SHOP_ADMIN) {
     return resp
       .status(STATUS.UNAUTHORIZE)
       .send(
@@ -123,7 +127,7 @@ module.exports.shipperUserTokenValidation = async (req, resp, next) => {
 
 module.exports.userValidation = async (req, resp, next) => {
   const { user_type } = req.body;
-  if (user_type != ACCOUNTTYPE.USER) {
+  if (user_type != ACCOUNT_TYPE.USER) {
     return resp
       .status(STATUS.UNAUTHORIZE)
       .send(
@@ -135,7 +139,7 @@ module.exports.userValidation = async (req, resp, next) => {
 };
 module.exports.userTokenValidation = async (req, resp, next) => {
   const { user_type } = req;
-  if (user_type != ACCOUNTTYPE.USER) {
+  if (user_type != ACCOUNT_TYPE.USER) {
     return resp
       .status(STATUS.UNAUTHORIZE)
       .send(

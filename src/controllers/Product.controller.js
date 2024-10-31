@@ -2,7 +2,7 @@ const ProductModal = require("../models/Product.modal");
 const CommissionModal = require("../models/Commission.modal");
 const ProductRatingModal = require("../models/ProductRating.modal");
 const { PROD_API, COMMON } = require("../constants/Product.messages");
-const { STATUS, ACCOUNTTYPE } = require("../constants/Constants");
+const { STATUS, ACCOUNT_TYPE } = require("../constants/Constants");
 const { apiResponse } = require("../helpers/apiResponse");
 const { errorResponse } = require("../helpers/errorResponse");
 

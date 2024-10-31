@@ -50,7 +50,7 @@ app.use(ProductRoutes);
 // RD ADMIN AND SHOP ADMIN END
 
 // ALL ACCESS ROUTES START
-app.use(UserRoutes);
+app.use(ROUTES.ROOT, UserRoutes);
 app.use(CartRoutes);
 app.use(OrderRoutes);
 app.use(PaymentRoutes);

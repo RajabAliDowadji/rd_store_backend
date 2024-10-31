@@ -14,7 +14,7 @@ module.exports.tokenValidation = async (req, resp, next) => {
   }
   let decodedToken;
   try {
-    decodedToken = jwt.verify(token, process.env.JWT_TOCKEN_KEY);
+    decodedToken = jwt.verify(token, process.env.JWT_TOKEN_KEY);
   } catch (err) {
     return resp
       .status(STATUS.UNAUTHORIZE)
@@ -29,7 +29,7 @@ module.exports.tokenValidation = async (req, resp, next) => {
         errorResponse(STATUS.UNAUTHORIZE, COMMON_ERROR.UNAUTHORIZE.message)
       );
   }
-  req.user_type = decodedToken.user_type;
-  req.user_id = decodedToken.user_id;
+  req.role = decodedToken.role;
+  req.id = decodedToken.id;
   next();
 };

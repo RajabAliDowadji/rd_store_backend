@@ -7,7 +7,7 @@ module.exports = {
     INTERNAL_SERVER: 500,
   },
   ROUTES: {
-    ROOT: "/",
+    ROOT: "/api",
     SUPER_ADMIN: "/rd_admin",
     SUPER_ADMIN_PRODUCT: "/rd_admin/product",
     PRODUCT: "/product",
@@ -16,7 +16,7 @@ module.exports = {
     ADMIN: "/admin",
     ADMIN_PRODUCT: "/admin/product",
   },
-  ACCOUNTTYPE: {
+  ACCOUNT_TYPE: {
     USER: "user",
     SHIPPER: "shipper",
     SHOP_ADMIN: "shop_admin",

@@ -16,6 +16,10 @@ module.exports = {
       message: "Please enter correct password.",
       status: 400,
     },
+    FIELD_ERROR: {
+      message: "Either email or phone number must be provided.",
+      status: 400,
+    },
   },
   USER_API: {
     USER_SUCCESS: {
@@ -40,6 +44,10 @@ module.exports = {
     },
     USER_NOT_FOUND: {
       message: "User not found.",
+      status: 400,
+    },
+    USER_NOT_AUTHORIZED_FOUND: {
+      message: "You are not authorized to perform this action.",
       status: 400,
     },
     USER_INVALID_ID: {
